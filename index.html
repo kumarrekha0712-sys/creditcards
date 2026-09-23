@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Credit Card Fraud Detection Dashboard</title>
+<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <h1>🛡️ Credit Card Fraud Detection</h1>
+      <p class="subtitle">Logistic Regression model &middot; adjustable decision threshold &middot; live metrics</p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Connection / error banner -->
+    <div id="error-banner" class="error-banner hidden"></div>
+
+    <!-- Threshold control -->
+    <section class="card threshold-card">
+      <h2>Fraud Detection Threshold</h2>
+      <div class="threshold-value" id="threshold-display">0.50</div>
+
+      <input
+        type="range"
+        id="threshold-slider"
+        min="0"
+        max="1"
+        step="0.01"
+        value="0.5"
+      />
+      <div class="slider-labels">
+        <span>0.00</span>
+        <span>1.00</span>
+      </div>
+
+      <div class="threshold-explainer">
+        <div class="explain-box lower">
+          <strong>⬅ Lower threshold</strong>
+          <p>More transactions get flagged as fraud. Recall goes up (fewer frauds missed), but false positives increase.</p>
+        </div>
+        <div class="explain-box higher">
+          <strong>Higher threshold ➡</strong>
+          <p>Fewer transactions get flagged as fraud. False positives drop, but more real fraud may be missed (lower recall).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Metric cards -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Accuracy</div>
+        <div class="metric-value" id="metric-accuracy">--</div>
+      </div>
+      <div class="metric-card highlight">
+        <div class="metric-label">Recall</div>
+        <div class="metric-value" id="metric-recall">--</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Precision</div>
+        <div class="metric-value" id="metric-precision">--</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">F1 Score</div>
+        <div class="metric-value" id="metric-f1">--</div>
+      </div>
+    </section>
+
+    <!-- Confusion matrix + TP/TN/FP/FN -->
+    <section class="card matrix-card">
+      <h2>Confusion Matrix</h2>
+      <div class="matrix-wrapper">
+        <table class="confusion-matrix">
+          <thead>
+            <tr>
+              <th></th>
+              <th colspan="2">Predicted</th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>Legitimate</th>
+              <th>Fraud</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="row-label">Actual<br />Legitimate</th>
+              <td class="cell tn" id="cell-tn">--</td>
+              <td class="cell fp" id="cell-fp">--</td>
+            </tr>
+            <tr>
+              <th class="row-label">Actual<br />Fraud</th>
+              <td class="cell fn" id="cell-fn">--</td>
+              <td class="cell tp" id="cell-tp">--</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="raw-counts">
+          <div class="count-item tn"><span class="dot"></span> True Negative (TN): <b id="count-tn">--</b></div>
+          <div class="count-item fp"><span class="dot"></span> False Positive (FP): <b id="count-fp">--</b></div>
+          <div class="count-item fn"><span class="dot"></span> False Negative (FN): <b id="count-fn">--</b></div>
+          <div class="count-item tp"><span class="dot"></span> True Positive (TP): <b id="count-tp">--</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bar visualization -->
+    <section class="card bar-card">
+      <h2>Visual Breakdown</h2>
+      <div class="bar-chart" id="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label">TN</span>
+          <div class="bar-track"><div class="bar-fill tn" id="bar-tn"></div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">FP</span>
+          <div class="bar-track"><div class="bar-fill fp" id="bar-fp"></div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">FN</span>
+          <div class="bar-track"><div class="bar-fill fn" id="bar-fn"></div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">TP</span>
+          <div class="bar-track"><div class="bar-fill tp" id="bar-tp"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer-note">
+      <p>Test set size: <b id="total-count">--</b> transactions &middot; Actual fraud cases: <b id="total-fraud">--</b></p>
+      <p class="small">Predictions are recomputed from cached model probabilities — the model is never retrained when you move the slider.</p>
+    </footer>
+
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
