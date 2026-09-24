@@ -31,7 +31,7 @@ app = FastAPI(
 # Serve the HTML/CSS/JavaScript frontend from the same FastAPI server.
 # This means the complete dashboard opens at http://127.0.0.1:8000/
 BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
-FRONTEND_DIR = os.path.abspath(os.path.join(BACKEND_DIR, "..", "frontend"))
+FRONTEND_DIR = os.path.abspath(os.path.join(BACKEND_DIR, "frontend"))
 
 if not os.path.isdir(FRONTEND_DIR):
     raise RuntimeError(f"Frontend directory not found: {FRONTEND_DIR}")
